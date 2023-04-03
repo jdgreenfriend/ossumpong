@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pong Game</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="400"></canvas>
+
+	<script>
+		// initialize canvas and context
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+
+		// initialize ball and paddles
+		var ball = { x: 200, y: 200, dx: 2, dy: -2, radius: 10 };
+		var paddle1 = { x: 10, y: 150, width: 10, height: 100 };
+		var paddle2 = { x: 380, y: 150, width: 10, height: 100 };
+
+		// draw ball and paddles
+		function draw() {
+			// clear canvas
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// draw ball
+			ctx.beginPath();
+			ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+			ctx.fillStyle = "black";
+			ctx.fill();
+			ctx.closePath();
+
+			// draw paddles
+			ctx.beginPath();
+			ctx.rect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+			ctx.fillStyle = "black";
+			ctx.fill();
+			ctx.closePath();
+
+			ctx.beginPath();
+			ctx.rect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
+			ctx.fillStyle = "black";
+			ctx.fill();
+			ctx.closePath();
+		}
+
+		// move ball and check for collisions
+		function move() {
+			// move ball
+			ball.x += ball.dx;
+			ball.y += ball.dy;
+
+			// check for collisions with walls
+			if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+				ball.dy = -ball.dy;
+			}
+			if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+				ball.dx = -ball.dx;
+			}
+
+			// check for collisions with paddles
+			if (ball.x - ball.radius < paddle1.x + paddle1.width && ball.y > paddle1.y && ball.y < paddle1.y + paddle1.height) {
+				ball.dx = -ball.dx;
+			}
+			if (ball.x + ball.radius > paddle2.x && ball.y > paddle2.y && ball.y < paddle2.y + paddle2.height) {
+				ball.dx = -ball.dx;
+			}
+		}
+
+		// move paddles based on user input
+		function movePaddles() {
+			// move paddle1
+			if (paddle1.y > 0 && keysPressed.up) {
+				paddle1.y -= 5;
+			}
+			if (paddle1.y + paddle1.height < canvas.height && keysPressed.down) {
+				paddle1.y += 5;
+			}
+
+			// move paddle2
+			if (paddle2.y > 0 && keysPressed.w) {
+				paddle2.y -= 5;
+			}
+			if (paddle2.y + paddle2.height < canvas.height && keysPressed.s) {
+				paddle2.y += 
